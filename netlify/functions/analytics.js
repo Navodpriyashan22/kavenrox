@@ -65,29 +65,29 @@ async function getAccessToken(serviceAccount) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error("Google authentication failed");
+    throw new Error("Google authentication failed: " + JSON.stringify(data));
   }
 
   return data.access_token;
 }
 
-async function runReport(token, body) {
-  const response = await fetch(
-    `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:runReport`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    }
-  );
+async function googleReport(token, reportType, body) {
+  const endpoint =
+    `https://analyticsdata.googleapis.com/v1beta/properties/${PROPERTY_ID}:${reportType}`;
+
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body)
+  });
 
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error("Analytics report failed");
+    throw new Error(`${reportType} failed: ${JSON.stringify(data)}`);
   }
 
   return data;
@@ -104,7 +104,7 @@ exports.handler = async (event) => {
     const adminPassword = process.env.KAVENROX_ADMIN_PASSWORD;
 
     if (!adminPassword) {
-      return jsonResponse(500, { error: "Admin password is not configured" });
+      throw new Error("Admin password is not configured");
     }
 
     const submittedHash = crypto
@@ -117,10 +117,7 @@ exports.handler = async (event) => {
       .update(adminPassword)
       .digest();
 
-    if (
-      submittedHash.length !== expectedHash.length ||
-      !crypto.timingSafeEqual(submittedHash, expectedHash)
-    ) {
+    if (!crypto.timingSafeEqual(submittedHash, expectedHash)) {
       return jsonResponse(401, { error: "Incorrect password" });
     }
 
@@ -134,21 +131,27 @@ exports.handler = async (event) => {
     const token = await getAccessToken(serviceAccount);
 
     const [overview, realtime] = await Promise.all([
-      runReport(token, {
-        dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
+      googleReport(token, "runReport", {
+        dateRanges: [
+          { startDate: "30daysAgo", endDate: "today" }
+        ],
         metrics: [
           { name: "totalUsers" },
           { name: "screenPageViews" },
           { name: "sessions" }
         ]
       }),
-      runReport(token, {
-        metrics: [{ name: "activeUsers" }]
+
+      googleReport(token, "runRealtimeReport", {
+        metrics: [
+          { name: "activeUsers" }
+        ]
       })
     ]);
 
     const values = overview.rows?.[0]?.metricValues || [];
-    const activeUsers = realtime.rows?.[0]?.metricValues?.[0]?.value || "0";
+    const activeUsers =
+      realtime.rows?.[0]?.metricValues?.[0]?.value || "0";
 
     return jsonResponse(200, {
       visitors: values[0]?.value || "0",
@@ -159,6 +162,8 @@ exports.handler = async (event) => {
     });
 
   } catch (error) {
+    console.error("KAVENROX Analytics error:", error);
+
     return jsonResponse(500, {
       error: "Unable to load Analytics data. Please check the configuration."
     });
