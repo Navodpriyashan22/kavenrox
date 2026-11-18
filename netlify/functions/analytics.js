@@ -93,6 +93,36 @@ async function googleReport(token, reportType, body) {
   return data;
 }
 
+function getTopCategories(report) {
+  const categoryNames = {
+    "/gadgets.html": "Gadgets & Tech",
+    "/home.html": "Home & Living",
+    "/fashion.html": "Fashion & Accessories",
+    "/beauty.html": "Beauty & Personal Care"
+  };
+
+  const totals = {};
+
+  for (const name of Object.values(categoryNames)) {
+    totals[name] = 0;
+  }
+
+  for (const row of report.rows || []) {
+    const pagePath = row.dimensionValues?.[0]?.value || "";
+    const views = Number(row.metricValues?.[0]?.value || 0);
+
+    for (const [path, category] of Object.entries(categoryNames)) {
+      if (pagePath.split("?")[0].replace(/\/$/, "") === path.replace(/\/$/, "")) {
+        totals[category] += views;
+      }
+    }
+  }
+
+  return Object.entries(totals)
+    .map(([name, views]) => ({ name, views }))
+    .sort((a, b) => b.views - a.views);
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return jsonResponse(405, { error: "Method not allowed" });
@@ -130,7 +160,7 @@ exports.handler = async (event) => {
     const serviceAccount = JSON.parse(rawCredentials);
     const token = await getAccessToken(serviceAccount);
 
-    const [overview, realtime] = await Promise.all([
+    const [overview, realtime, categoryReport] = await Promise.all([
       googleReport(token, "runReport", {
         dateRanges: [
           { startDate: "30daysAgo", endDate: "today" }
@@ -146,18 +176,35 @@ exports.handler = async (event) => {
         metrics: [
           { name: "activeUsers" }
         ]
+      }),
+
+      googleReport(token, "runReport", {
+        dateRanges: [
+          { startDate: "30daysAgo", endDate: "today" }
+        ],
+        dimensions: [
+          { name: "pagePath" }
+        ],
+        metrics: [
+          { name: "screenPageViews" }
+        ],
+        limit: "100"
       })
     ]);
 
     const values = overview.rows?.[0]?.metricValues || [];
+
     const activeUsers =
       realtime.rows?.[0]?.metricValues?.[0]?.value || "0";
+
+    const topCategories = getTopCategories(categoryReport);
 
     return jsonResponse(200, {
       visitors: values[0]?.value || "0",
       pageViews: values[1]?.value || "0",
       sessions: values[2]?.value || "0",
       activeUsers,
+      topCategories,
       period: "Last 30 days"
     });
 
