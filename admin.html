@@ -1,0 +1,501 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KAVENROX | Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #10110f;
+      color: #f5f1e8;
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    .hidden { display: none !important; }
+
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 410px;
+      background: #191a16;
+      border: 1px solid #38372c;
+      border-radius: 16px;
+      padding: 38px;
+    }
+
+    .login-box .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 27px;
+      letter-spacing: 2px;
+      color: #e5c98c;
+      text-align: center;
+    }
+
+    .login-box h1 {
+      font-size: 20px;
+      text-align: center;
+      margin-top: 28px;
+      font-weight: 500;
+    }
+
+    .login-box p {
+      color: #929083;
+      font-size: 12px;
+      text-align: center;
+      margin: 10px 0 25px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 14px;
+      background: #10110f;
+      border: 1px solid #454438;
+      border-radius: 8px;
+      color: #f5f1e8;
+      font: inherit;
+      outline: none;
+    }
+
+    .login-box input:focus { border-color: #e5c98c; }
+
+    .login-box button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 15px;
+      background: #e5c98c;
+      color: #171814;
+      border: 0;
+      border-radius: 8px;
+      font-weight: 700;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .login-box button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .login-error {
+      color: #e99b91;
+      font-size: 12px;
+      margin-top: 14px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    aside {
+      width: 245px;
+      background: #171814;
+      border-right: 1px solid #303128;
+      padding: 30px 22px;
+      flex-shrink: 0;
+    }
+
+    .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 25px;
+      letter-spacing: 2px;
+      color: #e5c98c;
+    }
+
+    .admin-label {
+      color: #858477;
+      font-size: 11px;
+      letter-spacing: 2px;
+      margin-top: 7px;
+      text-transform: uppercase;
+    }
+
+    .nav-title {
+      color: #77776c;
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin: 48px 0 16px;
+    }
+
+    .nav-item {
+      padding: 13px 14px;
+      border-radius: 9px;
+      color: #b9b7aa;
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .nav-item.active {
+      background: #302b20;
+      color: #e5c98c;
+    }
+
+    main { flex: 1; padding: 38px; min-width: 0; }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 38px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 34px;
+      font-weight: 600;
+    }
+
+    .subtitle { color: #8f8d81; font-size: 13px; margin-top: 8px; }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .status {
+      border: 1px solid #464535;
+      border-radius: 30px;
+      padding: 9px 15px;
+      color: #c9c3a7;
+      font-size: 11px;
+    }
+
+    .status span { color: #8ecb92; margin-right: 6px; }
+
+    .logout {
+      border: 1px solid #464535;
+      background: transparent;
+      color: #d2cbb9;
+      padding: 9px 15px;
+      border-radius: 30px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 11px;
+    }
+
+    .section-heading {
+      font-size: 12px;
+      color: #bcb9aa;
+      letter-spacing: 1.5px;
+      margin-bottom: 17px;
+      text-transform: uppercase;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #191a16;
+      border: 1px solid #303128;
+      border-radius: 13px;
+      padding: 23px;
+      min-height: 135px;
+    }
+
+    .card-label { color: #9c9a8e; font-size: 12px; }
+
+    .card-value {
+      font-size: 30px;
+      font-weight: 600;
+      margin-top: 19px;
+      color: #f0e8d6;
+    }
+
+    .card-note { color: #77766b; font-size: 11px; margin-top: 8px; }
+
+    .grid-bottom {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 17px;
+    }
+
+    .panel {
+      background: #191a16;
+      border: 1px solid #303128;
+      border-radius: 13px;
+      padding: 24px;
+      min-height: 220px;
+    }
+
+    .panel h2 {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+
+    .empty {
+      color: #77766b;
+      font-size: 12px;
+      line-height: 1.8;
+      padding: 25px 0;
+    }
+
+    .notice {
+      margin-top: 22px;
+      background: #242218;
+      border: 1px solid #49402a;
+      border-radius: 10px;
+      padding: 17px;
+      color: #c9bd9e;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    footer {
+      color: #66665c;
+      font-size: 11px;
+      margin-top: 38px;
+    }
+
+    @media (max-width: 950px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .grid-bottom { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 650px) {
+      .layout { display: block; }
+      aside { width: 100%; padding: 20px; }
+      .nav-title { margin-top: 22px; }
+      .nav-item { display: inline-block; margin-right: 5px; }
+      main { padding: 23px 17px; }
+      h1 { font-size: 28px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .stats { gap: 10px; }
+      .card { padding: 16px; min-height: 115px; }
+      .card-value { font-size: 25px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ADMIN LOGIN -->
+  <section class="login-screen" id="loginScreen">
+    <div class="login-box">
+      <div class="brand">KAVENROX</div>
+      <h1>Admin Access</h1>
+      <p>Enter your password to access your dashboard.</p>
+
+      <form id="loginForm">
+        <input
+          type="password"
+          id="adminPassword"
+          placeholder="Enter admin password"
+          autocomplete="current-password"
+          required
+        >
+        <button type="submit" id="loginButton">Access Dashboard</button>
+      </form>
+
+      <div class="login-error" id="loginError" role="alert"></div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <div class="layout hidden" id="dashboard">
+
+    <aside>
+      <div class="brand">KAVENROX</div>
+      <div class="admin-label">ADMINISTRATION</div>
+
+      <div class="nav-title">MAIN MENU</div>
+      <div class="nav-item active">◈ &nbsp; Overview</div>
+      <div class="nav-item">▤ &nbsp; Products</div>
+      <div class="nav-item">◎ &nbsp; Analytics</div>
+      <div class="nav-item">↗ &nbsp; Affiliate Activity</div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div>
+          <h1>Dashboard</h1>
+          <p class="subtitle">Welcome to your KAVENROX control centre.</p>
+        </div>
+
+        <div class="top-actions">
+          <div class="status"><span>●</span> Website Online</div>
+          <button class="logout" id="logoutButton">Logout</button>
+        </div>
+      </div>
+
+      <div class="section-heading">Website Performance · Last 30 Days</div>
+
+      <div class="stats">
+        <div class="card">
+          <div class="card-label">Total Visitors</div>
+          <div class="card-value" id="visitors">—</div>
+          <div class="card-note">Unique visitors</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Active Users</div>
+          <div class="card-value" id="activeUsers">—</div>
+          <div class="card-note">Realtime activity</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Page Views</div>
+          <div class="card-value" id="pageViews">—</div>
+          <div class="card-note">Total page views</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Product Clicks</div>
+          <div class="card-value">—</div>
+          <div class="card-note">Connection coming next</div>
+        </div>
+      </div>
+
+      <div class="grid-bottom">
+        <div class="panel">
+          <h2>Visitor Activity</h2>
+          <div class="empty" id="visitorActivity">
+            Loading Analytics data...
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Top Categories</h2>
+          <div class="empty">
+            Category performance connection coming next.
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Visitor Locations</h2>
+          <div class="empty">
+            Country statistics connection coming next.
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Devices & Traffic Sources</h2>
+          <div class="empty">
+            Device and traffic information connection coming next.
+          </div>
+        </div>
+      </div>
+
+      <div class="notice" id="connectionNotice">
+        <strong>Google Analytics</strong><br>
+        Your dashboard is connecting to Google Analytics.
+      </div>
+
+      <footer>© 2026 KAVENROX · Discover More. Choose Better.</footer>
+    </main>
+  </div>
+
+  <script>
+    const loginScreen = document.getElementById("loginScreen");
+    const dashboard = document.getElementById("dashboard");
+    const loginForm = document.getElementById("loginForm");
+    const passwordInput = document.getElementById("adminPassword");
+    const loginButton = document.getElementById("loginButton");
+    const loginError = document.getElementById("loginError");
+
+    let currentPassword = "";
+
+    function formatNumber(value) {
+      return Number(value || 0).toLocaleString("en-US");
+    }
+
+    async function loadAnalytics(password) {
+      const response = await fetch("/.netlify/functions/analytics", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ password })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("Incorrect password. Please try again.");
+        }
+        throw new Error(data.error || "Unable to connect to Analytics.");
+      }
+
+      document.getElementById("visitors").textContent =
+        formatNumber(data.visitors);
+
+      document.getElementById("activeUsers").textContent =
+        formatNumber(data.activeUsers);
+
+      document.getElementById("pageViews").textContent =
+        formatNumber(data.pageViews);
+
+      document.getElementById("visitorActivity").textContent =
+        "Analytics connection successful. Data shown above covers the last 30 days. More detailed reports will be added soon.";
+
+      document.getElementById("connectionNotice").innerHTML =
+        "<strong>Google Analytics connected</strong><br>Dashboard data loaded successfully. Detailed reports are being added next.";
+    }
+
+    loginForm.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const password = passwordInput.value;
+
+      loginError.textContent = "";
+      loginButton.disabled = true;
+      loginButton.textContent = "Checking...";
+
+      try {
+        await loadAnalytics(password);
+
+        currentPassword = password;
+        loginScreen.classList.add("hidden");
+        dashboard.classList.remove("hidden");
+        passwordInput.value = "";
+
+      } catch (error) {
+        loginError.textContent = error.message;
+        passwordInput.value = "";
+        passwordInput.focus();
+
+      } finally {
+        loginButton.disabled = false;
+        loginButton.textContent = "Access Dashboard";
+      }
+    });
+
+    document.getElementById("logoutButton").addEventListener("click", function() {
+      currentPassword = "";
+
+      document.getElementById("visitors").textContent = "—";
+      document.getElementById("activeUsers").textContent = "—";
+      document.getElementById("pageViews").textContent = "—";
+
+      dashboard.classList.add("hidden");
+      loginScreen.classList.remove("hidden");
+
+      loginError.textContent = "";
+      passwordInput.value = "";
+      passwordInput.focus();
+    });
+  </script>
+
+</body>
+</html>
