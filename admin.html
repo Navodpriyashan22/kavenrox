@@ -199,7 +199,7 @@
 
     .stats {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 16px;
       margin-bottom: 30px;
     }
@@ -250,6 +250,43 @@
       padding: 25px 0;
     }
 
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .category-row {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .category-info {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+    }
+
+    .category-name { color: #e6e0d2; }
+    .category-views { color: #e5c98c; font-weight: 600; }
+
+    .bar-track {
+      height: 7px;
+      background: #303128;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0;
+      background: #c9ad72;
+      border-radius: 20px;
+      transition: width .5s ease;
+    }
+
     .notice {
       margin-top: 22px;
       background: #242218;
@@ -289,7 +326,6 @@
 
 <body>
 
-  <!-- ADMIN LOGIN -->
   <section class="login-screen" id="loginScreen">
     <div class="login-box">
       <div class="brand">KAVENROX</div>
@@ -311,7 +347,6 @@
     </div>
   </section>
 
-  <!-- DASHBOARD -->
   <div class="layout hidden" id="dashboard">
 
     <aside>
@@ -358,12 +393,6 @@
           <div class="card-value" id="pageViews">—</div>
           <div class="card-note">Total page views</div>
         </div>
-
-        <div class="card">
-          <div class="card-label">Product Clicks</div>
-          <div class="card-value">—</div>
-          <div class="card-note">Connection coming next</div>
-        </div>
       </div>
 
       <div class="grid-bottom">
@@ -376,22 +405,8 @@
 
         <div class="panel">
           <h2>Top Categories</h2>
-          <div class="empty">
-            Category performance connection coming next.
-          </div>
-        </div>
-
-        <div class="panel">
-          <h2>Visitor Locations</h2>
-          <div class="empty">
-            Country statistics connection coming next.
-          </div>
-        </div>
-
-        <div class="panel">
-          <h2>Devices & Traffic Sources</h2>
-          <div class="empty">
-            Device and traffic information connection coming next.
+          <div id="topCategories" class="category-list">
+            <div class="empty">Loading category performance...</div>
           </div>
         </div>
       </div>
@@ -413,10 +428,56 @@
     const loginButton = document.getElementById("loginButton");
     const loginError = document.getElementById("loginError");
 
-    let currentPassword = "";
-
     function formatNumber(value) {
       return Number(value || 0).toLocaleString("en-US");
+    }
+
+    function renderTopCategories(categories) {
+      const container = document.getElementById("topCategories");
+      container.replaceChildren();
+
+      if (!Array.isArray(categories) || categories.length === 0) {
+        container.textContent = "No category data available yet.";
+        container.className = "empty";
+        return;
+      }
+
+      container.className = "category-list";
+
+      const maxViews = Math.max(
+        1,
+        ...categories.map(category => Number(category.views || 0))
+      );
+
+      categories.forEach(category => {
+        const row = document.createElement("div");
+        row.className = "category-row";
+
+        const info = document.createElement("div");
+        info.className = "category-info";
+
+        const name = document.createElement("span");
+        name.className = "category-name";
+        name.textContent = category.name;
+
+        const views = document.createElement("span");
+        views.className = "category-views";
+        views.textContent = formatNumber(category.views) + " views";
+
+        info.append(name, views);
+
+        const track = document.createElement("div");
+        track.className = "bar-track";
+
+        const fill = document.createElement("div");
+        fill.className = "bar-fill";
+        fill.style.width =
+          (Number(category.views || 0) / maxViews * 100) + "%";
+
+        track.appendChild(fill);
+        row.append(info, track);
+        container.appendChild(row);
+      });
     }
 
     async function loadAnalytics(password) {
@@ -446,11 +507,13 @@
       document.getElementById("pageViews").textContent =
         formatNumber(data.pageViews);
 
+      renderTopCategories(data.topCategories);
+
       document.getElementById("visitorActivity").textContent =
-        "Analytics connection successful. Data shown above covers the last 30 days. More detailed reports will be added soon.";
+        "Analytics connection successful. Data shown above covers the last 30 days.";
 
       document.getElementById("connectionNotice").innerHTML =
-        "<strong>Google Analytics connected</strong><br>Dashboard data loaded successfully. Detailed reports are being added next.";
+        "<strong>Google Analytics connected</strong><br>Dashboard data loaded successfully. Category performance covers the last 30 days.";
     }
 
     loginForm.addEventListener("submit", async function(event) {
@@ -465,7 +528,6 @@
       try {
         await loadAnalytics(password);
 
-        currentPassword = password;
         loginScreen.classList.add("hidden");
         dashboard.classList.remove("hidden");
         passwordInput.value = "";
@@ -482,11 +544,11 @@
     });
 
     document.getElementById("logoutButton").addEventListener("click", function() {
-      currentPassword = "";
-
       document.getElementById("visitors").textContent = "—";
       document.getElementById("activeUsers").textContent = "—";
       document.getElementById("pageViews").textContent = "—";
+
+      document.getElementById("topCategories").replaceChildren();
 
       dashboard.classList.add("hidden");
       loginScreen.classList.remove("hidden");
