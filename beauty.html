@@ -1,0 +1,453 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beauty & Personal Care | KAVENROX</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+ font-family:'DM Sans',sans-serif;
+ background:#faf9f6;
+ color:#292923;
+ position:relative;
+ min-height:100vh;
+}
+
+body::before{
+ content:"KAVENROX";
+ position:fixed;
+ top:45%;
+ left:50%;
+ transform:translate(-50%,-50%) rotate(-25deg);
+ font-size:clamp(55px,12vw,145px);
+ font-weight:700;
+ letter-spacing:12px;
+ color:rgba(190,166,119,.055);
+ white-space:nowrap;
+ pointer-events:none;
+ z-index:-1;
+}
+
+header{
+ padding:22px 7%;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ border-bottom:1px solid #eae7df;
+ background:rgba(250,249,246,.92);
+}
+
+.logo{
+ font-family:'Playfair Display',serif;
+ font-size:28px;
+ font-weight:700;
+ letter-spacing:2px;
+ color:#292923;
+ text-decoration:none;
+}
+
+nav{display:flex;gap:25px}
+
+nav a{
+ text-decoration:none;
+ color:#55554d;
+ font-size:13px;
+ font-weight:600;
+}
+
+nav a:hover{color:#ad9160}
+
+main{
+ max-width:1200px;
+ margin:auto;
+ padding:35px 7% 80px;
+}
+
+.breadcrumb{
+ font-size:12px;
+ color:#88877e;
+ margin-bottom:35px;
+}
+
+.breadcrumb a{
+ color:#88877e;
+ text-decoration:none;
+}
+
+.hero{text-align:center;margin-bottom:40px}
+
+.eyebrow{
+ color:#a58a5b;
+ font-size:11px;
+ letter-spacing:3px;
+ font-weight:700;
+ text-transform:uppercase;
+ margin-bottom:13px;
+}
+
+h1{
+ font-family:'Playfair Display',serif;
+ font-size:clamp(35px,5vw,54px);
+ font-weight:600;
+ margin-bottom:12px;
+}
+
+.subtitle{
+ color:#77766e;
+ font-size:14px;
+ line-height:1.8;
+ max-width:550px;
+ margin:auto;
+}
+
+.search-wrap{
+ max-width:480px;
+ margin:32px auto 45px;
+}
+
+.search-wrap input{
+ width:100%;
+ padding:15px 20px;
+ border:1px solid #e2ded5;
+ border-radius:30px;
+ background:#fff;
+ font:inherit;
+ font-size:13px;
+ outline:none;
+}
+
+.search-wrap input:focus{border-color:#b59a69}
+
+.section-label{
+ font-size:11px;
+ letter-spacing:2px;
+ color:#9a835c;
+ font-weight:700;
+ margin-bottom:20px;
+}
+
+.products{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:25px;
+}
+
+.product-card{
+ background:#fff;
+ border:1px solid #eeeae2;
+ border-radius:12px;
+ overflow:hidden;
+ transition:.25s;
+}
+
+.product-card:hover{
+ transform:translateY(-5px);
+ box-shadow:0 12px 30px rgba(0,0,0,.07);
+}
+
+.product-image{
+ width:100%;
+ height:230px;
+ object-fit:contain;
+ background:#f5f3ee;
+ padding:15px;
+}
+
+.product-info{padding:20px}
+
+.product-category{
+ font-size:10px;
+ letter-spacing:1.5px;
+ color:#a58a5b;
+ text-transform:uppercase;
+ margin-bottom:10px;
+}
+
+.product-name{
+ font-family:'Playfair Display',serif;
+ font-size:19px;
+ font-weight:600;
+ margin-bottom:9px;
+}
+
+.product-description{
+ font-size:12px;
+ color:#77766e;
+ line-height:1.7;
+ margin-bottom:15px;
+}
+
+.product-price{
+ font-size:15px;
+ font-weight:700;
+ margin-bottom:16px;
+}
+
+.view-button{
+ display:block;
+ text-align:center;
+ padding:12px;
+ border-radius:5px;
+ background:#292923;
+ color:white;
+ text-decoration:none;
+ font-size:12px;
+ font-weight:600;
+ transition:.2s;
+}
+
+.view-button:hover{background:#a58a5b}
+
+.message{
+ text-align:center;
+ padding:65px 15px;
+ color:#77766e;
+ font-size:14px;
+ line-height:1.8;
+}
+
+.message h2{
+ font-family:'Playfair Display',serif;
+ font-size:25px;
+ color:#292923;
+ margin-bottom:12px;
+}
+
+footer{
+ border-top:1px solid #eae7df;
+ text-align:center;
+ padding:35px 7%;
+ color:#88877e;
+ font-size:11px;
+ line-height:2;
+}
+
+footer strong{
+ font-family:'Playfair Display',serif;
+ font-size:17px;
+ color:#292923;
+ letter-spacing:2px;
+}
+
+@media(max-width:750px){
+ header{padding:18px 5%;flex-direction:column;gap:15px}
+ nav{gap:16px;flex-wrap:wrap;justify-content:center}
+ nav a{font-size:12px}
+ main{padding:28px 5% 60px}
+ .products{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+ .product-image{height:165px}
+ .product-info{padding:13px}
+ .product-name{font-size:16px}
+ .product-description{font-size:11px}
+ .view-button{padding:11px 5px;font-size:11px}
+}
+
+@media(max-width:380px){
+ .products{grid-template-columns:1fr}
+ .product-image{height:220px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<a href="index.html" class="logo">KAVENROX</a>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="gadgets.html">Gadgets</a>
+<a href="home.html">Home & Living</a>
+<a href="fashion.html">Fashion</a>
+<a href="beauty.html">Beauty</a>
+</nav>
+</header>
+
+<main>
+
+<div class="breadcrumb">
+<a href="index.html">Home</a> / Beauty & Personal Care
+</div>
+
+<section class="hero">
+<p class="eyebrow">YOUR EVERYDAY ESSENTIALS</p>
+<h1>Beauty & Personal Care</h1>
+<p class="subtitle">
+Discover beauty finds and personal care essentials
+that make your everyday routine feel special.
+</p>
+</section>
+
+<div class="search-wrap">
+<input type="search" id="searchInput"
+placeholder="Search beauty products...">
+</div>
+
+<p class="section-label">EXPLORE OUR COLLECTION</p>
+
+<div class="products" id="productGrid"></div>
+
+<div class="message" id="message" style="display:none">
+<h2>Something Good Is Coming</h2>
+<p>We're preparing something special for you.<br>
+Check back soon.</p>
+</div>
+
+</main>
+
+<footer>
+<strong>KAVENROX</strong>
+<p>Discover More. Choose Better.</p>
+<p>Some links on this website are affiliate links.
+We may earn a commission at no extra cost to you.</p>
+<p>© 2026 KAVENROX. All rights reserved.</p>
+</footer>
+
+<script>
+const SHEET_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vTGBOSETNouI_lgvLeKqsZdhi70H1NXa6ilQEKy3aTn7yd2de5M1eB5XfRFvNpXDYQO_cLoGkBF16Ux/pub?output=csv";
+
+const grid = document.getElementById("productGrid");
+const message = document.getElementById("message");
+const searchInput = document.getElementById("searchInput");
+
+let allProducts = [];
+
+function parseCSV(text){
+ const rows=[];
+ let row=[],cell="",inside=false;
+
+ for(let i=0;i<text.length;i++){
+  const c=text[i];
+  const next=text[i+1];
+
+  if(c === '"' && inside && next === '"'){
+   cell+='"';i++;
+  }else if(c === '"'){
+   inside=!inside;
+  }else if(c === ',' && !inside){
+   row.push(cell);cell="";
+  }else if((c === '\n' || c === '\r') && !inside){
+   if(c === '\r' && next === '\n') i++;
+   row.push(cell);
+   if(row.some(v=>v.trim()!=="")) rows.push(row);
+   row=[];cell="";
+  }else{
+   cell+=c;
+  }
+ }
+
+ row.push(cell);
+ if(row.some(v=>v.trim()!=="")) rows.push(row);
+
+ const headers=rows.shift().map(h=>h.trim());
+
+ return rows.map(r=>{
+  const obj={};
+  headers.forEach((h,i)=>obj[h]=(r[i]||"").trim());
+  return obj;
+ });
+}
+
+function showProducts(products){
+ grid.innerHTML="";
+
+ if(products.length===0){
+  message.style.display="block";
+  return;
+ }
+
+ message.style.display="none";
+
+ products.forEach(product=>{
+  const card=document.createElement("article");
+  card.className="product-card";
+
+  const img=document.createElement("img");
+  img.className="product-image";
+  img.src=product.Image_URL;
+  img.alt=product.Product_Name;
+  img.loading="lazy";
+
+  const info=document.createElement("div");
+  info.className="product-info";
+
+  const category=document.createElement("p");
+  category.className="product-category";
+  category.textContent="Beauty & Personal Care";
+
+  const name=document.createElement("h3");
+  name.className="product-name";
+  name.textContent=product.Product_Name;
+
+  const description=document.createElement("p");
+  description.className="product-description";
+  description.textContent=product.Description;
+
+  info.append(category,name,description);
+
+  if(product.Price){
+   const price=document.createElement("p");
+   price.className="product-price";
+   price.textContent=product.Price;
+   info.appendChild(price);
+  }
+
+  const link=document.createElement("a");
+  link.className="view-button";
+  link.href=product.Affiliate_Link;
+  link.target="_blank";
+  link.rel="noopener noreferrer sponsored";
+  link.textContent="View Product";
+
+  info.appendChild(link);
+  card.append(img,info);
+  grid.appendChild(card);
+ });
+}
+
+async function loadProducts(){
+ try{
+  const response=await fetch(SHEET_URL,{cache:"no-store"});
+  if(!response.ok) throw new Error("Sheet loading failed");
+
+  const csv=await response.text();
+
+  allProducts=parseCSV(csv).filter(p=>
+   (p.Status||"").toLowerCase()==="active" &&
+   (p.Category||"").toLowerCase()==="beauty" &&
+   p.Product_Name &&
+   p.Image_URL &&
+   p.Affiliate_Link
+  );
+
+  showProducts(allProducts);
+
+ }catch(error){
+  message.style.display="block";
+  message.innerHTML="<h2>Unable to Load Products</h2><p>Please refresh the page and try again.</p>";
+ }
+}
+
+searchInput.addEventListener("input",()=>{
+ const term=searchInput.value.toLowerCase();
+
+ const filtered=allProducts.filter(p=>
+  (p.Product_Name+" "+p.Description).toLowerCase().includes(term)
+ );
+
+ showProducts(filtered);
+});
+
+loadProducts();
+</script>
+
+</body>
+</html>
