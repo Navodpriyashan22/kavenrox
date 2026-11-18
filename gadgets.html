@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8f6f0">
 <title>Gadgets & Tech | KAVENROX</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,7 +41,7 @@ body::before {
   font-size:clamp(65px,14vw,190px);
   font-weight:700;
   letter-spacing:14px;
-  color:rgba(168,139,92,.065);
+  color:rgba(168,139,92,.055);
   white-space:nowrap;
   pointer-events:none;
   z-index:0;
@@ -57,7 +58,7 @@ header {
   justify-content:space-between;
   align-items:center;
   border-bottom:1px solid rgba(36,36,31,.08);
-  background:rgba(248,246,240,.95);
+  background:rgba(248,246,240,.96);
 }
 
 .logo {
@@ -81,7 +82,8 @@ nav {
 nav a {
   text-decoration:none;
   color:var(--dark);
-  font-size:13px;
+  font-size:12px;
+  font-weight:600;
 }
 
 nav a:hover {
@@ -127,8 +129,8 @@ nav a:hover {
 }
 
 .products-section {
-  max-width:1200px;
-  padding:30px 30px 100px;
+  max-width:1240px;
+  padding:30px 35px 100px;
   margin:auto;
 }
 
@@ -147,11 +149,11 @@ nav a:hover {
 }
 
 .search-box {
-  width:270px;
+  width:290px;
   max-width:100%;
-  padding:12px 15px;
+  padding:13px 16px;
   border:1px solid #dedbd2;
-  background:rgba(255,255,255,.7);
+  background:rgba(255,255,255,.75);
   outline:none;
   font-family:inherit;
   font-size:12px;
@@ -161,56 +163,65 @@ nav a:hover {
   border-color:var(--gold);
 }
 
+/* PRODUCT GRID */
+
 .product-grid {
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:25px;
+  gap:26px;
 }
 
 .product-card {
-  background:rgba(255,255,255,.75);
+  background:#fff;
   border:1px solid rgba(36,36,31,.07);
+  border-radius:5px;
   overflow:hidden;
   transition:transform .3s,box-shadow .3s;
 }
 
 .product-card:hover {
   transform:translateY(-5px);
-  box-shadow:0 12px 30px rgba(36,36,31,.08);
+  box-shadow:0 15px 35px rgba(36,36,31,.09);
+}
+
+.image-wrap {
+  background:#f1eee7;
+  overflow:hidden;
 }
 
 .product-image {
   width:100%;
   aspect-ratio:1/1;
-  object-fit:cover;
+  object-fit:contain;
+  padding:12px;
   display:block;
-  background:#eeeae1;
+  transition:transform .4s;
+}
+
+.product-card:hover .product-image {
+  transform:scale(1.04);
+}
+
+.image-fallback {
+  display:none;
+  aspect-ratio:1/1;
+  align-items:center;
+  justify-content:center;
+  font-family:'Playfair Display',serif;
+  color:#aaa;
+  letter-spacing:3px;
 }
 
 .product-info {
-  padding:19px;
+  padding:18px;
 }
 
-.product-category {
-  font-size:9px;
-  letter-spacing:2px;
-  color:var(--gold);
-  text-transform:uppercase;
-}
-
-.product-info h3 {
+.product-name {
   font-family:'Playfair Display',serif;
-  font-size:20px;
+  font-size:19px;
   font-weight:500;
-  margin-top:9px;
-  line-height:1.35;
-}
-
-.product-description {
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.7;
-  margin-top:9px;
+  line-height:1.4;
+  min-height:54px;
 }
 
 .product-bottom {
@@ -218,22 +229,23 @@ nav a:hover {
   justify-content:space-between;
   align-items:center;
   gap:10px;
-  margin-top:20px;
+  margin-top:17px;
 }
 
 .product-price {
-  font-weight:700;
   font-size:15px;
+  font-weight:700;
 }
 
 .view-button {
   display:inline-block;
-  padding:11px 14px;
+  padding:12px 15px;
   background:var(--dark);
   color:white;
   text-decoration:none;
   font-size:10px;
   letter-spacing:1px;
+  font-weight:600;
   white-space:nowrap;
   transition:.3s;
 }
@@ -242,9 +254,55 @@ nav a:hover {
   background:var(--gold);
 }
 
+/* PRODUCT DETAILS */
+
+.details-button {
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:13px 0 0;
+  margin-top:16px;
+  border:0;
+  border-top:1px solid #eeeae2;
+  background:transparent;
+  color:var(--muted);
+  font-family:inherit;
+  font-size:11px;
+  cursor:pointer;
+  text-align:left;
+}
+
+.details-button:hover {
+  color:var(--gold);
+}
+
+.details-icon {
+  font-size:17px;
+  transition:transform .25s;
+}
+
+.details-button[aria-expanded="true"] .details-icon {
+  transform:rotate(45deg);
+}
+
+.product-details {
+  display:none;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.8;
+  padding-top:12px;
+}
+
+.product-details.open {
+  display:block;
+}
+
+/* MESSAGES */
+
 .message {
   border:1px solid rgba(168,139,92,.25);
-  background:rgba(255,255,255,.55);
+  background:rgba(255,255,255,.65);
   padding:65px 20px;
   text-align:center;
   grid-column:1/-1;
@@ -252,7 +310,7 @@ nav a:hover {
 
 .message h2 {
   font-family:'Playfair Display',serif;
-  font-size:27px;
+  font-size:28px;
   font-weight:500;
 }
 
@@ -263,6 +321,8 @@ nav a:hover {
   font-size:13px;
   line-height:1.8;
 }
+
+/* FOOTER */
 
 footer {
   background:var(--dark);
@@ -319,7 +379,7 @@ footer p {
   }
 
   nav a {
-    font-size:11px;
+    font-size:10px;
   }
 
   .intro {
@@ -331,7 +391,7 @@ footer p {
   }
 
   .products-section {
-    padding:25px 14px 70px;
+    padding:25px 13px 70px;
   }
 
   .toolbar {
@@ -350,27 +410,40 @@ footer p {
     padding:12px;
   }
 
-  .product-info h3 {
-    font-size:17px;
-  }
-
-  .product-description {
-    font-size:11px;
+  .product-name {
+    font-size:16px;
+    min-height:46px;
   }
 
   .product-bottom {
-    align-items:flex-start;
+    align-items:stretch;
     flex-direction:column;
+    gap:10px;
+  }
+
+  .product-price {
+    font-size:13px;
   }
 
   .view-button {
     width:100%;
     text-align:center;
+    padding:11px 5px;
+  }
+
+  .details-button {
+    font-size:10px;
   }
 
   body::before {
     font-size:65px;
     letter-spacing:5px;
+  }
+}
+
+@media(max-width:350px) {
+  .product-grid {
+    grid-template-columns:1fr;
   }
 }
 </style>
@@ -380,7 +453,6 @@ footer p {
 
 <header>
   <a href="index.html" class="logo">KAVENRO<span>X</span></a>
-
   <nav>
     <a href="index.html">Home</a>
     <a href="index.html#categories">Collections</a>
@@ -508,36 +580,39 @@ function createProductCard(product) {
   const card = document.createElement("article");
   card.className = "product-card";
 
+  const imageWrap = document.createElement("div");
+  imageWrap.className = "image-wrap";
+
   const image = document.createElement("img");
   image.className = "product-image";
   image.src = product.Image_URL;
   image.alt = product.Product_Name;
   image.loading = "lazy";
 
+  const fallback = document.createElement("div");
+  fallback.className = "image-fallback";
+  fallback.textContent = "KAVENROX";
+
   image.onerror = () => {
     image.style.display = "none";
+    fallback.style.display = "flex";
   };
+
+  imageWrap.append(image, fallback);
 
   const info = document.createElement("div");
   info.className = "product-info";
 
-  const category = document.createElement("div");
-  category.className = "product-category";
-  category.textContent = product.Category;
-
   const name = document.createElement("h3");
+  name.className = "product-name";
   name.textContent = product.Product_Name;
-
-  const description = document.createElement("p");
-  description.className = "product-description";
-  description.textContent = product.Description;
 
   const bottom = document.createElement("div");
   bottom.className = "product-bottom";
 
   const price = document.createElement("div");
   price.className = "product-price";
-  price.textContent = product.Price;
+  price.textContent = product.Price || "";
 
   const link = document.createElement("a");
   link.className = "view-button";
@@ -547,8 +622,32 @@ function createProductCard(product) {
   link.rel = "noopener noreferrer sponsored";
 
   bottom.append(price, link);
-  info.append(category, name, description, bottom);
-  card.append(image, info);
+
+  const detailsButton = document.createElement("button");
+  detailsButton.className = "details-button";
+  detailsButton.type = "button";
+  detailsButton.setAttribute("aria-expanded", "false");
+
+  const detailsLabel = document.createElement("span");
+  detailsLabel.textContent = "Product Details";
+
+  const icon = document.createElement("span");
+  icon.className = "details-icon";
+  icon.textContent = "+";
+
+  detailsButton.append(detailsLabel, icon);
+
+  const details = document.createElement("div");
+  details.className = "product-details";
+  details.textContent = product.Description || "No additional details available.";
+
+  detailsButton.addEventListener("click", () => {
+    const isOpen = details.classList.toggle("open");
+    detailsButton.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  info.append(name, bottom, detailsButton, details);
+  card.append(imageWrap, info);
 
   return card;
 }
@@ -557,8 +656,11 @@ function renderProducts() {
   const query = searchInput.value.trim().toLowerCase();
 
   const filtered = products.filter(product =>
-    [product.Product_Name, product.Description, product.Category]
-      .some(value => value.toLowerCase().includes(query))
+    [
+      product.Product_Name,
+      product.Description,
+      product.Category
+    ].some(value => (value || "").toLowerCase().includes(query))
   );
 
   grid.innerHTML = "";
@@ -609,8 +711,8 @@ async function loadProducts() {
 
       return item;
     }).filter(product =>
-      product.Status.toLowerCase() === "active" &&
-      product.Category.toLowerCase() === "gadgets" &&
+      (product.Status || "").toLowerCase() === "active" &&
+      (product.Category || "").toLowerCase() === "gadgets" &&
       product.Product_Name &&
       product.Image_URL &&
       product.Affiliate_Link

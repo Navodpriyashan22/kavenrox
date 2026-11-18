@@ -135,7 +135,7 @@ h1{
 
 .products{
  display:grid;
- grid-template-columns:repeat(3,1fr);
+ grid-template-columns:repeat(3,minmax(0,1fr));
  gap:25px;
 }
 
@@ -158,36 +158,31 @@ h1{
  object-fit:contain;
  background:#f5f3ee;
  padding:15px;
+ display:block;
 }
 
-.product-info{padding:20px}
-
-.product-category{
- font-size:10px;
- letter-spacing:1.5px;
- color:#a58a5b;
- text-transform:uppercase;
- margin-bottom:10px;
-}
+.product-info{padding:18px}
 
 .product-name{
  font-family:'Playfair Display',serif;
  font-size:19px;
  font-weight:600;
- margin-bottom:9px;
+ line-height:1.4;
+ margin-bottom:13px;
 }
 
-.product-description{
- font-size:12px;
- color:#77766e;
- line-height:1.7;
- margin-bottom:15px;
+.product-bottom{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ margin-bottom:13px;
 }
 
 .product-price{
  font-size:15px;
  font-weight:700;
- margin-bottom:16px;
+ color:#292923;
 }
 
 .view-button{
@@ -201,9 +196,42 @@ h1{
  font-size:12px;
  font-weight:600;
  transition:.2s;
+ flex:1;
 }
 
 .view-button:hover{background:#a58a5b}
+
+.details-button{
+ width:100%;
+ padding:10px;
+ border:1px solid #e8e2d7;
+ border-radius:5px;
+ background:#faf9f6;
+ color:#77705f;
+ font-family:inherit;
+ font-size:11px;
+ font-weight:600;
+ cursor:pointer;
+ transition:.2s;
+}
+
+.details-button:hover{
+ background:#f1eee7;
+ border-color:#b59a69;
+}
+
+.product-description{
+ display:none;
+ padding:12px 13px;
+ margin-top:10px;
+ background:#faf9f6;
+ border-radius:6px;
+ color:#77766e;
+ font-size:12px;
+ line-height:1.7;
+}
+
+.product-description.show{display:block}
 
 .message{
  text-align:center;
@@ -237,16 +265,29 @@ footer strong{
 }
 
 @media(max-width:750px){
- header{padding:18px 5%;flex-direction:column;gap:15px}
- nav{gap:16px;flex-wrap:wrap;justify-content:center}
+ header{
+  padding:18px 5%;
+  flex-direction:column;
+  gap:15px;
+ }
+ nav{
+  gap:16px;
+  flex-wrap:wrap;
+  justify-content:center;
+ }
  nav a{font-size:12px}
  main{padding:28px 5% 60px}
- .products{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+ .products{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px;
+ }
  .product-image{height:165px}
  .product-info{padding:13px}
  .product-name{font-size:16px}
- .product-description{font-size:11px}
+ .product-price{font-size:13px}
+ .product-bottom{gap:7px}
  .view-button{padding:11px 5px;font-size:11px}
+ .details-button{font-size:10px}
 }
 
 @media(max-width:380px){
@@ -379,25 +420,20 @@ function showProducts(products){
   const info=document.createElement("div");
   info.className="product-info";
 
-  const category=document.createElement("p");
-  category.className="product-category";
-  category.textContent="Fashion & Accessories";
-
   const name=document.createElement("h3");
   name.className="product-name";
   name.textContent=product.Product_Name;
 
-  const description=document.createElement("p");
-  description.className="product-description";
-  description.textContent=product.Description;
+  info.appendChild(name);
 
-  info.append(category,name,description);
+  const bottom=document.createElement("div");
+  bottom.className="product-bottom";
 
   if(product.Price){
    const price=document.createElement("p");
    price.className="product-price";
    price.textContent=product.Price;
-   info.appendChild(price);
+   bottom.appendChild(price);
   }
 
   const link=document.createElement("a");
@@ -407,7 +443,33 @@ function showProducts(products){
   link.rel="noopener noreferrer sponsored";
   link.textContent="View Product";
 
-  info.appendChild(link);
+  bottom.appendChild(link);
+  info.appendChild(bottom);
+
+  if(product.Description){
+   const detailsButton=document.createElement("button");
+   detailsButton.className="details-button";
+   detailsButton.type="button";
+   detailsButton.textContent="Product Details +";
+   detailsButton.setAttribute("aria-expanded","false");
+
+   const description=document.createElement("p");
+   description.className="product-description";
+   description.textContent=product.Description;
+
+   detailsButton.addEventListener("click",()=>{
+    const isOpen=description.classList.toggle("show");
+
+    detailsButton.textContent=isOpen
+     ?"Product Details −"
+     :"Product Details +";
+
+    detailsButton.setAttribute("aria-expanded",String(isOpen));
+   });
+
+   info.append(detailsButton,description);
+  }
+
   card.append(img,info);
   grid.appendChild(card);
  });
